@@ -1,0 +1,4 @@
+--run
+--lint
+--reverse-errors
+--no-height-limit
