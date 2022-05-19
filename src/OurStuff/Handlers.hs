@@ -1,4 +1,17 @@
-module OurStuff.Handlers where
+{-# LANGUAGE OverloadedStrings #-}
+
+module OurStuff.Handlers(
+    increaseAndShowCounter
+    ) where
+
+import Data.Text qualified as T
+import Database.PostgreSQL.Simple as PSQL
+import Network.Wai.Request (guessApproot)
+import OurStuff.Paths qualified as Paths
+import Web.Spock (SpockAction)
+import Web.Spock qualified as S
+import System.IO.Error (userError, ioError)
+
 
 err :: MonadIO m => String -> m a
 err msg = liftIO (ioError (userError msg))
@@ -22,8 +35,8 @@ increaseAndShowCounter name = do
 
     hostname <- decodeUtf8 . guessApproot <$> S.request
 
-    text $
+    S.text $
         T.unlines
             [ "yooo " <> T.pack (show count)
-            , "Go to " <> hostname <> S.renderRoute countersPath name <> "!"
+            , "Go to " <> hostname <> S.renderRoute Paths.counters name <> "!"
             ]

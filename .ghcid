@@ -1,4 +1,5 @@
---run
 --lint
 --reverse-errors
 --no-height-limit
+--clear
+--command "cabal repl"
