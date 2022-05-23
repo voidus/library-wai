@@ -2,4 +2,7 @@
 --reverse-errors
 --no-height-limit
 --clear
---command "cabal repl"
+
+--allow-eval
+
+-c "cabal repl"

@@ -4,7 +4,7 @@
 {-# OPTIONS -Wno-missing-signatures #-}
 {-# OPTIONS -Wno-missing-export-lists #-}
 
-module OurStuff.Paths where
+module Ourstuff.Paths where
 
 import Web.Spock
 

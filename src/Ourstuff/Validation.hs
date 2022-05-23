@@ -1,15 +1,21 @@
-module OurStuff.Validation where
+module Ourstuff.Validation where
 
 import Data.Map.Strict qualified as Map
-import Data.Validation (Validation (Failure, Success), validationNel)
+import Data.Validation (Validation (Failure))
 import Data.List.NonEmpty qualified as NE
+import Data.List.NonEmpty (singleton)
 
 
 newtype ValidationError = ValidationError Text
     deriving stock (Show)
 
 
+
 type Valid a = Validation (NonEmpty ValidationError) a
+
+validationFailure :: Text -> Valid a
+validationFailure =
+    Failure . singleton . ValidationError
 
 
 getParameter :: Text -> Map Text a -> Either ValidationError a

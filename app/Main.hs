@@ -4,9 +4,9 @@
 
 module Main (main) where
 
-import OurStuff.App (app)
-import OurStuff.AppTypes (OurStuffSession (EmptySession), OurStuffState (EmptyState))
-import OurStuff.DB (connectionBuilder)
+import Ourstuff.App (app)
+import Ourstuff.AppTypes (OurstuffSession (EmptySession), OurstuffState (EmptyState))
+import Ourstuff.DB (connectionBuilder)
 import Web.Spock (runSpock, spock)
 import Web.Spock.Config (defaultSpockCfg)
 import Web.Spock.Config qualified as Spock

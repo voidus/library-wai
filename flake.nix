@@ -8,7 +8,9 @@
 
       t = pkgs.lib.trivial;
 
-      project = returnShellEnv: pkgs.haskellPackages.developPackage {
+      haskellPackages = pkgs.haskell.packages.ghc902;
+
+      project = returnShellEnv: haskellPackages.developPackage {
         root = pkgs.lib.sourceFilesBySuffices ./. [ ".cabal" ".hs" ];
         inherit name;
         returnShellEnv = returnShellEnv;
@@ -43,8 +45,9 @@
         pkgs.hlint
 
         # formatters
-        pkgs.haskellPackages.cabal-fmt
-        pkgs.haskellPackages.fourmolu
+        #haskellPackages.cabal-fmt
+        pkgs.haskellPackages.cabal-fmt  # Broken on ghc 9.22
+        haskellPackages.fourmolu
 
         # database
         pkgs.postgresql
@@ -61,6 +64,9 @@
             ) &
           fi
           exec postgres -c listen_addresses= -c unix_socket_directories=$PGHOST
+        '')
+        (pkgs.writeShellScriptBin "tdd" ''
+          exec ghcid --run --reload=src -s ':set -isrc' --warnings test
         '')
       ];
       shellHook = ''

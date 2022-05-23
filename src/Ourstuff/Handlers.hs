@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module OurStuff.Handlers(
+module Ourstuff.Handlers(
     increaseAndShowCounter
     ) where
 
 import Data.Text qualified as T
 import Database.PostgreSQL.Simple as PSQL
 import Network.Wai.Request (guessApproot)
-import OurStuff.Paths qualified as Paths
+import Ourstuff.Paths qualified as Paths
 import Web.Spock (SpockAction)
 import Web.Spock qualified as S
 import System.IO.Error (userError, ioError)

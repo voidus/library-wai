@@ -1,22 +1,22 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module OurStuff.App (app) where
+module Ourstuff.App (app) where
 
 import Network.HTTP.Types (methodNotAllowed405)
-import OurStuff.AppTypes (Action, Spock)
-import OurStuff.CreateItems qualified
-import OurStuff.Handlers qualified as H
-import OurStuff.Paths qualified as P
+import Ourstuff.AppTypes (Action, Spock)
+import Ourstuff.CreateItems qualified
+import Ourstuff.Handlers qualified as H
+import Ourstuff.Paths qualified as P
 import Web.Spock
 import Web.Spock qualified as Spock
 
 
 app :: Spock ()
 app = do
-    Spock.get P.counters H.increaseAndShowCounter
     hookRouteAll P.counters $ const methodNotAllowed
+    Spock.get P.counters H.increaseAndShowCounter
 
-    hookRouteAll P.items OurStuff.CreateItems.handler
+    hookRouteAll P.items Ourstuff.CreateItems.handler
 
 
 methodNotAllowed :: Action ()

@@ -16,24 +16,30 @@ common common
     -Wno-partial-type-signatures
 
   default-extensions:
+    ApplicativeDo
     BlockArguments
+    DeriveAnyClass
+    DeriveGeneric
+    DerivingStrategies
     EmptyCase
+    FlexibleContexts
+    FlexibleInstances
+    GeneralizedNewtypeDeriving
     ImportQualifiedPost
     LambdaCase
+    MultiParamTypeClasses
     MultiWayIf
     OverloadedStrings
     PartialTypeSignatures
     RecordWildCards
     ScopedTypeVariables
+    StandaloneDeriving
     TypeApplications
-    ApplicativeDo
-    DerivingStrategies
-    GeneralizedNewtypeDeriving
+    UndecidableInstances
 
   build-depends:
-    , base    ^>=4.15.1.0
-    , relude  ^>=1.0.0.1
-    , Spock   ^>=0.14.0.0
+    , base
+    , relude
 
   mixins:
     base hiding (Prelude),
@@ -43,34 +49,65 @@ common common
 executable ourstuff
   import:         common
   main-is:        Main.hs
-  build-depends:  ourstuff
+  build-depends:
+    , ourstuff
+    , Spock
+
   hs-source-dirs: app
 
-library
-  import:          common
-  hs-source-dirs:  src
+common library-deps
   build-depends:
-    , containers         ^>=0.6.4.1
-    , http-types         ^>=0.12.3
-    , lucid              ^>=2.11.0
-    , postgresql-simple  ^>=0.6.2
-    , Spock-lucid        ^>=0.4.0.1
-    , text               ^>=1.2.5.0
-    , time               ^>=1.9.3
-    , validation         ^>=1.1.2
-    , wai                ^>=3.2.3
-    , wai-extra          ^>=3.1.10
+    , beam-core
+    , beam-postgres
+    , containers
+    , http-types
+    , lucid
+    , more-containers
+    , postgresql-simple
+    , Spock
+    , Spock-lucid
+    , tagged
+    , text
+    , time
+    , type-map
+    , validation
+    , wai
+    , wai-extra
+
+library
+  import:          common, library-deps
+  hs-source-dirs:  src
 
   -- cabal-fmt: expand src
   exposed-modules:
-    OurStuff.App
-    OurStuff.AppTypes
-    OurStuff.CreateItems
-    OurStuff.CreateItems.View
-    OurStuff.DB
-    OurStuff.Handlers
-    OurStuff.Item
-    OurStuff.Paths
-    OurStuff.Validation
+    Ourstuff.App
+    Ourstuff.AppTypes
+    Ourstuff.CreateItems
+    Ourstuff.CreateItems.View
+    Ourstuff.DB
+    Ourstuff.Handlers
+    Ourstuff.Item
+    Ourstuff.Paths
+    Ourstuff.Validation
+
+test-suite test
+  import:          common, library-deps
+  type:            exitcode-stdio-1.0
+  hs-source-dirs:  tests
+  main-is:         Driver.hs
+
+  -- build-tool-depends:
+  --   tasty-discover:tasty-discover
+  build-depends:
+    , hspec
+    , ourstuff
+    , tasty
+    , tasty-discover
+    , tasty-hspec
+
+  -- cabal-fmt: expand tests
+  exposed-modules:
+    Driver
+    SomeTest
 
 -- vim: ts=2 sts=2 sw=2
