@@ -2,6 +2,8 @@
 --reverse-errors
 --no-height-limit
 --clear
+-s ":set -fprint-explicit-kinds"
+-s ":set -Wno-deprecations"
 
 --allow-eval
 

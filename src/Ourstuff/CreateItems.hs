@@ -38,8 +38,6 @@ import Web.Spock (request, setStatus, text)
 import Web.Spock qualified as Spock
 import Web.Spock.Lucid (lucid, lucidIO)
 import GHC.TypeLits (Symbol, symbolVal', KnownSymbol, symbolVal)
-import Data.TypeMap.List (TypeList, (<|))
-import qualified Data.TypeMap.Internal.List as TypeMap
 
 
 handler :: Action ()
@@ -50,67 +48,8 @@ handler = do
             | m == methodPost -> doPost
             | otherwise -> setStatus methodNotAllowed405 *> text ""
 
-data ItemForm f = ItemForm {
-    itemformTitle :: f "title" Text,
-    itemformZipcode :: f "zipcode" Zipcode
-}
-
-data ZRenderData (name :: Symbol) field = Missing | FailedParse (NonEmpty ValidationError) | Value field
-data ZParseResult field = Validation (NonEmpty ValidationError) field
-
-data FormValidation namesAndResults name a
-    = FormValidationFailure (TypeList namesAndResults)
-    | FormValidationSuccess (TypeList namesAndResults) a
-
-zzzParse :: forall (name :: Symbol) field. ZForm field => ParamMap -> FormValidation '[ '(name, ZRenderData name (ZResult field))] name (ZResult field)
-zzzParse params =
-    case zParse @field params of
-      Failure err -> FormValidationFailure (FailedParse err <| TypeMap.empty)
-      Success value -> FormValidationSuccess (Value value <| TypeMap.empty) value
-
-
-
-class ZForm (form :: (Symbol -> Type -> Type) -> Type) where
-    type ZResult form
-    zRender :: form ZRenderData -> Html ()
-    zParse :: ParamMap -> Validation (NonEmpty ValidationError) field
-
-instance ZForm ItemForm where
-    type ZResult ItemForm = Item
-    zParse = undefined
-    zRender ItemForm{itemformTitle, itemformZipcode} =
-        let
-            renderThing :: forall name field. KnownSymbol name => ZRenderData name field -> (field -> Text) -> Html ()
-            renderThing v r =
-                let
-                    name = T.pack $ symbolVal @name Proxy
-                    tag = "(" <> name <> ")"
-                 in case v of
-                      Missing -> p_ $ toHtml (tag <> " is missing")
-                      (FailedParse t) -> p_ $ toHtml (tag <> " failed parse (" <> show t <> ")")
-                      (Value val)-> p_ $ toHtml (tag <> " worked!: " <> r val)
-        in ul_ $ do
-            li_ $ renderThing itemformTitle ("Title: " <>)
-            li_ $ renderThing itemformZipcode (\zipcode -> "Zipcode: " <> unZipcode zipcode)
-
-
-
-
--- instance Fieldable ItemForm where
---     type RawFieldableValue ItemForm = ParamMap
---     extract params prefix = Success $ focusPrefix prefix params
---     parse params = do
---         _itemTitle <- exParse params "title"
---         _itemZipcode <- exParse params "zipCode"
---         pure $ ItemForm $ Item{..}
-    -- render prefix value =
-
-
 doGet :: Action ()
--- doGet = renderLegacyForm Nothing
-doGet =
-    undefined
-    -- lucid $ render @ItemForm NoInput
+doGet = renderLegacyForm Nothing
 
 
 renderLegacyForm :: Maybe (NonEmpty ValidationError) -> Action ()

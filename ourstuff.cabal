@@ -60,6 +60,7 @@ common library-deps
     , beam-core
     , beam-postgres
     , containers
+    , dependent-map
     , http-types
     , lucid
     , more-containers
@@ -69,7 +70,7 @@ common library-deps
     , tagged
     , text
     , time
-    , type-map
+    , type-level-sets
     , validation
     , wai
     , wai-extra
@@ -85,6 +86,8 @@ library
     Ourstuff.CreateItems
     Ourstuff.CreateItems.View
     Ourstuff.DB
+    Ourstuff.ExistentialsExperimentials
+    Ourstuff.Form
     Ourstuff.Handlers
     Ourstuff.Item
     Ourstuff.Paths
@@ -108,6 +111,8 @@ test-suite test
   -- cabal-fmt: expand tests
   exposed-modules:
     Driver
+    OurStuff.Form
+    OurStuff.FormTest
     SomeTest
 
 -- vim: ts=2 sts=2 sw=2
